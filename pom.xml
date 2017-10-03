@@ -17,7 +17,6 @@
 		<uid>userName</uid>
 		<pwd>password</pwd>
 	</properties>
-
 	<build>
 		<plugins>
 			<plugin>
