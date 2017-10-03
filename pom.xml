@@ -10,7 +10,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<mule.version>1.8.5</mule.version>
+		<mule.version>3.8.5</mule.version>
 		<mule.tools.version>1.2</mule.tools.version>
 		<derby.version>10.13.1.1</derby.version>
 		<activemq.version>5.15.0</activemq.version>
