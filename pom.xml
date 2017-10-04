@@ -18,6 +18,7 @@
 		<pwd>password</pwd>
 	</properties>
 	<build>
+	
 		<plugins>
 			<plugin>
 				<groupId>org.mule.tools.maven</groupId>
