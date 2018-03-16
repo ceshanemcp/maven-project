@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <artifactId>SpringBatch</artifactId>
+        <groupId>com.devry.integrations.SpringBatch</groupId>
+        <version>1.0.0</version>
+    </parent> 
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.devry.integrations.SpringBatch.${artifactId}</groupId>
+    <artifactId>${artifactId}</artifactId>
+    <version>${version}</version>
+    <name>${artifactId} </name>
+    
+    <packaging>jar</packaging>
+    <description>${artifactId} Spring batch Project</description>
+    <developers>
+        <developer>
+            <name>${devName}</name>
+            <email>${devEmail}</email>
+            <organization>DeVry Education Group</organization>
+        </developer>
+    </developers>
+    <licenses>
+        <license>
+            <name>DeVry Education Group</name>
+            <comments>Copyright (c) 2009 - 2014 DeVry Education Group
+    All Rights Reserved.
+
+    This software program and information contained herein are
+    copyrighted and may not be distributed, modified, or reproduce
+    in whole or in part without prior advance written consent of
+    DeVry Education Group.
+
+    This product includes software developed by the Apache Software
+    Foundation (http://www.apache.org)
+    		</comments>
+        </license>
+    </licenses>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>3.1.1.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.syslog4j</groupId>
+            <artifactId>syslog4j</artifactId>
+            <version>0.9.30</version>
+        </dependency>
+        <dependency>
+            <groupId>com.devry.crm.ccp.dkc.enterprise.ws.client</groupId>
+            <artifactId>SFDCEnterprise</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.devry.common</groupId>
+            <artifactId>DeVryJava</artifactId>
+            <version>0.0.4</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>xercesImpl</artifactId>
+                    <groupId>xerces</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>orabpel</artifactId>
+                    <groupId>com.oracle.bpel</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>oc4j-internal</artifactId>
+                    <groupId>com.oracle.internal</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>xml-apis</artifactId>
+                    <groupId>xml-apis</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spring</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.devry.common</groupId>
+            <artifactId>DeVryWeb</artifactId>
+            <version>0.0.1</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>SFDCEnterprise</artifactId>
+                    <groupId>com.devry</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>axis2-kernel</artifactId>
+                    <groupId>org.apache.axis2</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>axis2-spring</artifactId>
+                    <groupId>org.apache.axis2</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>axis2-xmlbeans</artifactId>
+                    <groupId>org.apache.axis2</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>wss4j</artifactId>
+                    <groupId>org.apache.ws.security</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>hibernate-annotations</artifactId>
+                    <groupId>org.hibernate</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spring</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlbeans</groupId>
+            <artifactId>xmlbeans</artifactId>
+            <version>2.4.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.devry.common</groupId>
+            <artifactId>DeVryIntegrationUtilities</artifactId>
+            <version>0.0.6</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hibernate</groupId>
+                    <artifactId>hibernate-annotations</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-jdbc</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.7</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.easymock</groupId>
+            <artifactId>easymock</artifactId>
+            <version>3.0</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>${artifactId}</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>run</directory>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>false</filtering>
+            </testResource>
+        </testResources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin
+				</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.1</version>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>src/main/resources/assembly.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	 http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd
+	 http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+    
+    <!-- TODO This bean is created for the ProcessInput class.  This is an override
+           to indicate the number of messages to process.  Uncomment the 
+           "messagesToProcess" property to implement. -->
+    <bean id="MessagesToProcess" class="java.lang.Integer">
+        <constructor-arg index="0" type="java.lang.String"
+            value="${symbol_dollar}{batch.messages.to.process}" />
+    </bean>
+    
+    <!--  takes a string value for true and transforms it to the needed boolean. -->
+    <bean id="dataTypeHelper"
+        class="${package}.consumer.message.util.DataTypeHelper">
+        <property name="stringValue" value="${topic.nonDestructive}" />
+    </bean>
+    
+	<bean id="messagePublisher"
+		class="${package}.topic.post.TopicPublisher"
+		init-method="initializeConnection">
+		<constructor-arg ref="connectionFactoryOracleAQTopic"
+			type="javax.jms.TopicConnectionFactory" />
+		<property name="sessionAcknowledgeMode" value="${topic.sessionMode}"/>
+		<property name="username" value="${topic.username}" />
+		<property name="password" value="${topic.password}" />
+		<property name="topicOwner" value="${topic.owner}" />
+		<property name="topicName" value="${topic.name}" />
+		<property name="dataTypeHelper" ref="dataTypeHelper" />
+		<property name="transAudit" ref="transAudit" />
+	</bean>
+	
+    
+    <bean id="connectionFactoryOracleAQTopic" class="oracle.jms.AQjmsFactory"
+        factory-method="getQueueConnectionFactory">
+        <constructor-arg index="0" type="java.lang.String"
+            value="${queue.connection.url}" />
+        <constructor-arg index="1" type="java.util.Properties">
+            <util:properties></util:properties>
+        </constructor-arg>
+    </bean>
+</beans>

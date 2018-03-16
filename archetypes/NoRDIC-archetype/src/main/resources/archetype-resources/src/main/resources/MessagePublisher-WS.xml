@@ -1,0 +1,40 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	 http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd
+	 http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+	
+	<bean id="sfdcProcessSOAP"
+		class="${package}.ws.client.SFDCProcessSOAP">
+		<property name="stub" ref="sfdcEnterpriseStub" />
+		<property name="userCred" ref="userCredentials" />
+	</bean>
+	
+	<bean id="userCredentials" class="com.devry.common.client.pojo.UserCredentials">
+		<property name="userName" value="${symbol_dollar}{sfdc.username}" />
+		<property name="password" value="${symbol_dollar}{sfdc.password}" />
+	</bean>
+
+	<bean id="sfdcEnterpriseStub"
+		class="com.devry.crm.enterprise.ccp.dkc.ws.client.SforceServiceStub">
+		<constructor-arg index="0" type="java.lang.String"
+			value="${symbol_dollar}{sfdc.endpoint}" />
+	</bean>
+	
+    <bean id="userCredentials" class="com.devry.common.client.pojo.UserCredentials">
+        <property name="userName" value="${symbol_dollar}{sfdc.username}" />
+        <property name="password" value="${symbol_dollar}{sfdc.password}" />
+    </bean>
+
+    <bean id="sfdcEnterpriseStub"
+        class="com.devry.crm.enterprise.ccp.dkc.ws.client.SforceServiceStub">
+        <constructor-arg index="0" type="java.lang.String"
+            value="${symbol_dollar}{sfdc.endpoint}" />
+    </bean>
+</beans>
