@@ -1,0 +1,21 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set(
+$symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+	<changeSet id="Bpel_INT_UTILITY_${artifactId}_Data" author="Integrations"
+		context="Integrations" dbms="oracle" runAlways="true" runOnChange="true">
+		<sqlFile
+			path="src/main/resources/dbscripts/data/${artifactId}_DB_properties.sql"
+			stripComments="false" splitStatements="true" />
+
+		<rollback>
+			<sqlFile
+				path="src/main/resources/dbscripts/data/${artifactId}_DB_properties_Rollback.sql"
+				stripComments="false" splitStatements="true" />
+		</rollback>
+	</changeSet>
+</databaseChangeLog>

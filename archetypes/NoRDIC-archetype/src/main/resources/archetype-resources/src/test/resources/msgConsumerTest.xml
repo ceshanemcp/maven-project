@@ -1,0 +1,41 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	 http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+
+    <import resource="devryUtilityConfigBootstrapJDBC.xml" />
+	<import resource="messagingContext.xml"/>
+	
+	<bean id="bannerDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url" value="jdbc:oracle:thin:@bnrint2db1.int2.devry.edu:1521:BNRINT2" />
+		<property name="username" value="DEVRYADM" />
+		<property name="password" value="devry2010" />
+	</bean>
+	
+    <!--  Datasource for JDBC data-source 	-->
+	<bean id="auditDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url" 
+		    value="jdbc:oracle:thin:@esbint2db1.int2.devry.edu:1521:BPLINT2" />
+		<property name="username" value="INT_UTILITY" />
+		<property name="password" value="Gr3yst0n${symbol_dollar}" />
+	</bean>
+	
+	<bean id="userCredentials" class="com.devry.common.client.pojo.UserCredentials">
+		<property name="userName" value="fiorano@devrygroup.com.pinata" />
+		<property name="password" value="walrusjaguar03fH8eWMNcE4A7Sf8aoX2hzyfh" />
+	</bean>
+
+	<bean id="sfdcEnterpriseStub"
+		class="com.devry.crm.enterprise.ccp.dkc.ws.client.SforceServiceStub">
+		<constructor-arg index="0" type="java.lang.String"
+			value="https://test.salesforce.com/services/Soap/c/32.0/" />
+	</bean>
+</beans>

@@ -1,0 +1,144 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+	<context:annotation-config />
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>configbootstrap.properties</value>
+			</list>
+		</property>
+		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+		<property name="order" value="1" />
+	</bean>
+
+	<import resource="devryUtilityConfigBootstrapJDBC.xml" />
+	<import resource="notificationCtx.xml" />
+	<import resource="dataSourceCtxJDBC.xml" />
+    <import resource="messagingContext.xml" />
+    
+    <!--   TODO:  Message consumers Keep only the one you want to work with.  
+                  Also - remove the unneeded classes to finish the clean up. -->
+    <import resource="MessageConsumer-AQ.xml" />
+    <import resource="MessageConsumer-SP.xml" />
+    
+    <!--   TODO:  Message Publishers Keep only the one you want to work with.  
+                  Also - remove the unneeded classes to finish the clean up. -->
+    <import resource="MessagePublisher-AQTopic.xml" />
+    <import resource="MessagePublisher-AQQueue.xml" />
+    <import resource="MessagePublisher-WS.xml" />
+
+	<bean id="NoRDICExecutor"
+		class="com.devry.integration.nordic.framework.driver.NoRDICExecutor">
+		<property name="engine" ref="NoRDICEngine" />
+		<property name="emailSender" ref="EmailSender" /> 
+		<property name="input" ref="DriverInput" />
+	</bean>
+
+	<bean id="NoRDICEngine"
+		class="com.devry.integration.nordic.framework.engine.NoRDICEngine">
+		<property name="processInput" ref="ProcessInput" />
+		<property name="transactionManager" ref="transactionManager" />
+		<property name="messageConsumer" ref="messageConsumer" />
+		<property name="preProcessor" ref="PreProcessor" />
+		<property name="uniqueProcessor" ref="UniqueMessageProcessor" />
+		<property name="duplicateProcessor" ref="DuplicateMessageProcessor" />
+		<property name="invalidProcessor" ref="InvalidMessageProcessor" />
+		<property name="unParsableProcessor" ref="UnparsableMessageProcessor" />
+	</bean>
+
+	<bean id="ProcessInput"
+		class="com.devry.integration.nordic.framework.process.ProcessInput">
+		<!--  <property name="messagesToProcess" ref="MessagesToProcess" />  -->		
+		<property name="processAllMessages" value="false" />
+	</bean>
+	 
+	<bean id="DriverInput"
+		class="com.devry.integration.nordic.framework.driver.DriverInput">
+		<property name="processName" value="${symbol_dollar}{bootstrap.data.process.name}" />
+		<property name="processSleepTime" value="${symbol_dollar}{batch.sleep.time}" />
+		<property name="numberOfRuns" value="${symbol_dollar}{batch.number.of.runs}" />
+		<property name="notifyResults" value="${symbol_dollar}{notification.notify}" />
+        <property name="notificationProcessCode" value="${bootstrap.data.process.name}" />
+        <property name="notificationEventCodeSuccess" value="${symbol_dollar}{notify.ec.success}" />
+        <property name="notificationSubjectSuccess" value="${symbol_dollar}{notify.subject.success}" />
+        <property name="notificationEventCodeFailure" value="${symbol_dollar}{notify.ec.failure}" />
+        <property name="notificationSubjectFailure" value="${symbol_dollar}{nnotify.subject.failure" />
+	</bean>
+
+	<bean id="PreProcessor"
+		class="${package}.processors.parser.${artifactId}PreProcessor">
+		<property name="parser" ref="Parser" />
+	</bean>
+
+	<bean id="Parser" class="${package}.processors.parser.${artifactId}Parser" />
+
+	<bean id="UniqueMessageProcessor" class="${package}.processors.UniqueMessageProcessor">
+		<property name="transAudit" ref="AuditHelp" />
+		<property name="sfdcWriter" ref="sfdcProcessSOAP" />
+		<property name="shouldProcess" value="true" />
+	</bean>
+	
+	<bean id="DuplicateMessageProcessor"
+		class="${package}.processors.DuplicateMessageProcessor">
+		<property name="auditHelper" ref="AuditHelp" />
+		<property name="shouldProcess" value="true" />
+	</bean>
+
+	<bean id="InvalidMessageProcessor"
+		class="${package}.processors.InvalidMessageProcessor">
+		<property name="auditHelper" ref="AuditHelp" />
+		<property name="shouldProcess" value="true" />
+	</bean>
+
+	<bean id="UnparsableMessageProcessor"
+		class="${package}.processors.UnparsableMessageProcessor">
+		<property name="auditHelper" ref="AuditHelp" />
+		<property name="shouldProcess" value="true" />
+	</bean>
+	
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+		lazy-init="true">
+		<property name="dataSource" ref="dbBootstrapDataSourceJDBC" />
+	</bean>
+
+    <!--   Audit Service -->
+	<bean id="AuditHelp"
+		class="${package}.audit.impl.AuditHelperImpl">
+		<property name="audit" ref="audit" />
+		<property name="processName" value="${bootstrap.data.process.name}" />
+	</bean>
+
+	<bean id="audit" class="com.devry.integration.audit.impl.AuditImpl"
+		scope="prototype">
+		<property name="auditDAO" ref="auditDao" />
+	</bean>
+
+	<bean id="auditDao" class="com.devry.integration.dao.impl.AuditDAOImpl">
+		<property name="sessionFactory" ref="IntgUtilitySessionFactory" />
+	</bean>
+	
+	<!--   Notification Service -->
+	<bean id="EmailSender"
+        class="com.devry.integration.nordic.framework.email.EmailSender">
+        <property name="email" ref="email" />
+    </bean>
+
+    <bean id="email"
+        class="com.devry.common.emailNotification.impl.EmailNotificationImpl"
+        init-method="init">
+        <property name="notificationEndPoint" value="${notification.service.endpoint}" />
+    </bean>
+</beans>

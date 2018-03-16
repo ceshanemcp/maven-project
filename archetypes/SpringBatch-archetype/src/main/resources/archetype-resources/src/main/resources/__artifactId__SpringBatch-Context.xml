@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:batch="http://www.springframework.org/schema/batch" xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:util="http://www.springframework.org/schema/util" xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-2.1.xsd  http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-2.5.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd">
+
+    <context:annotation-config />
+    <bean id="propertyConfigurer"
+        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>configbootstrap.properties</value>
+            </list>
+        </property>
+        <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+        <property name="ignoreUnresolvablePlaceholders" value="true" />
+        <property name="order" value="1" />
+    </bean>
+
+    <import resource="simple-job-launcher-context.xml" />
+    <import resource="${artifactId}-Audit.xml" />
+
+    <!-- Here are the defined imports for Readers -->
+    <import resource="${artifactId}-Reader-FlatFile.xml" />
+    <import resource="${artifactId}-Reader-SP.xml" />
+    <import resource="${artifactId}-Reader-SQL.xml" />
+
+    <!-- Here are the defined imports for Writers -->
+    <import resource="${artifactId}-Writer-FlatFile.xml" />
+    <import resource="${artifactId}-Writer-WS.xml" />
+
+    <!-- Job Launcher for to process -->
+    <bean id="jobLauncher" class="${package}.main.${artifactId}JobLauncher">
+        <property name="job" ref="${artifactId}Job" />
+        <property name="lastSourceSync" ref="lastSourceSyncSP" />
+    </bean>
+
+    <batch:job id="${artifactId}Job">
+        <batch:step id="itemStep">
+            <batch:tasklet>
+                <batch:chunk reader="itemReader" processor="itemProcessor"
+                    writer="itemWriter" commit-interval="1">
+                </batch:chunk>
+            </batch:tasklet>
+            <batch:listeners>
+                <batch:listener ref="stepExecutionListener" />
+            </batch:listeners>
+        </batch:step>
+    </batch:job>
+
+    <bean id="stepExecutionListener" class="${package}.listener.${artifactId}StepExecutionListener"
+        scope="step">
+        <property name="audit" ref=${artifactId}Audit />
+    </bean>
+
+    <bean id="itemProcessor" class="${package}.processor.${artifactId}Processor"
+        scope="step">
+        <property name="audit" ref="${artifactId}Audit" />
+    </bean>
+
+    <bean id="lastSourceSyncSP" class="${package}.sp.LastSourceSyncSP">
+        <constructor-arg index="0" type="javax.sql.DataSource">
+            <ref bean="dbBootstrapDataSourceJDBC" />
+        </constructor-arg>
+        <constructor-arg index="1" type="java.lang.String">
+            <value>${last.source.sync.stored.proc}
+            </value>
+        </constructor-arg>
+        <constructor-arg index="2" type="java.lang.String">
+            <value>${bootstrap.data.process.name}
+            </value>
+        </constructor-arg>
+    </bean>
+</beans>

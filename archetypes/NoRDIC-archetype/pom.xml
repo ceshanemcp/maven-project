@@ -1,0 +1,86 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.devry.integrations.nordic</groupId>
+	<artifactId>NoRDIC-archetype</artifactId>
+    <packaging>maven-archetype</packaging>
+ 	<version>0.0.2</version>
+    <name>NoRDIC-archetype</name>
+    <description>Archetype for generating NoRDIC java projects for NoRDIC.</description>
+
+  <build>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-ftp</artifactId>
+        <version>1.0-beta-2</version>
+      </extension>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-file</artifactId>
+        <version>1.0-beta-2</version>
+      </extension>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-ssh</artifactId>
+        <version>1.0-beta-2</version>
+      </extension>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-webdav</artifactId>
+        <version>1.0-beta-2</version>
+      </extension>
+      <extension>
+        <groupId>org.apache.maven.archetype</groupId>
+        <artifactId>archetype-packaging</artifactId>
+        <version>2.4</version>
+      </extension>
+    </extensions>
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-archetype-plugin</artifactId>
+          <version>2.4</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+  <url>http://www.devry.com/NoRDIC</url>
+
+  <developers>
+    <developer>
+      <name>Charles Shane</name>
+      <email>cshane@devrygroup.com</email>
+      <organization>DeVry Education Group</organization>
+    </developer>
+  </developers>
+
+  <licenses>
+    <license>
+      <name>DeVry Education Group</name>
+      <comments>Copyright (c) 2009 - 2014 DeVry Education Group
+    All Rights Reserved.
+
+    This software program and information contained herein are
+    copyrighted and may not be distributed, modified, or reproduce
+    in whole or in part without prior advance written consent of
+    DeVry Education Group.
+
+    This product includes software developed by the Apache Software
+    Foundation (http://www.apache.org)</comments>
+    </license>
+  </licenses>
+  <distributionManagement>
+    <repository>
+      <id>deploymentRepo</id>
+      <name>Nexus</name>
+      <url>http://10.152.2.60:8080/nexus/content/repositories/releases/</url>
+    </repository>
+    <snapshotRepository>
+      <id>deploymentRepo</id>
+      <url>http://10.152.2.60:8080/nexus/content/repositories/snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
+</project>

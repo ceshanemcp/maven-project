@@ -1,0 +1,58 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	 http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd
+	 http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+	
+	<bean id="messageConsumer"
+		class="${package}.consumer.${artifactId}MessageConsumer">
+		<property name="messageConsumerReaderSP" ref="messageConsumerReaderSP" />
+		<property name="lastSourceSyncSP" ref="lastSourceSyncSP" />
+	</bean>
+
+	<bean id="messageConsumerReaderSP"
+		class="${package}.consumer.sp.MessageConsumerReaderSP">
+		<constructor-arg index="0" type="javax.sql.DataSource">
+			<ref bean="bannerDataSource" />
+		</constructor-arg>
+		<constructor-arg index="1" type="java.lang.String">
+			<!-- <value>${symbol_dollar}{admissions.nordic.message.messageReaderSP}</value>  -->
+			<value>DML_SHBTAT_C.GET_TATC_RECORDS
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="messageConsumerDetailReaderSP"
+		class="${package}.consumer.sp.MessageConsumerDetailReaderSP">
+		<constructor-arg index="0" type="javax.sql.DataSource">
+			<ref bean="bannerDataSource" />
+		</constructor-arg>
+		<constructor-arg index="1" type="java.lang.String">
+			<!-- <value>${symbol_dollar}{admissions.nordic.message.messageReaderSP}</value>  -->
+			<value>DML_SHBTAT_C.GET_DETAIL_RECORDS
+			</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="lastSourceSyncSP"
+		class="${package}.consumer.sp.LastSourceSyncSP">
+		<constructor-arg index="0" type="javax.sql.DataSource">
+			<ref bean="auditDataSource" />
+		</constructor-arg>
+		<constructor-arg index="1" type="java.lang.String">
+			<value>INT_UTILITY.AUDIT_UTILITY_PKG.GET_LAST_SOURCE_SYNC_TIME
+			</value>
+			<!-- 	<value>${symbol_dollar}{te.nordic.message.lastSourceSyncSP}</value> -->
+		</constructor-arg>
+		<constructor-arg index="2" type="java.lang.String">
+			<value>${artifactId}</value>
+			<!-- 	<value>${symbol_dollar}{te.nordic.processName}</value> -->
+		</constructor-arg>
+	</bean>
+</beans>

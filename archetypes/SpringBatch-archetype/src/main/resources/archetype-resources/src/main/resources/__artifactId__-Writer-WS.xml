@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd">
+    
+    <!-- Writer --> 
+    <bean id="itemWriter" class="${package}.writer.${artifactId}Writer"
+        scope="step">
+        <property name="audit" ref="${artifactId}Audit" />
+        <property name="clientProcess" ref="${artifactId}SFDCProcess" />
+    </bean>
+
+    <bean id="${artifactId}SFDCProcess" class="${package}.sfdc.TOSFDCProcess">
+        <property name="stub" ref="sfdcEnterpriseStub" />
+        <property name="userCred" ref="userCredentials" />
+        <property name="query" value="${transcript.outreach.id.query}" />
+        <property name="department" value="${case.department}" />
+        <property name="subject" value="${case.subject}" />
+        <property name="requestDetail" value="${case.request.detail}" />
+        <property name="assignmentRule" value="${case.assignmentRule}" />
+    </bean>
+
+    <bean id="userCredentials" class="com.devry.common.client.pojo.UserCredentials">
+        <property name="userName" value="${sfdc.username}" />
+        <property name="password" value="${sfdc.password}" />
+    </bean>
+
+    <bean id="sfdcEnterpriseStub" class="com.devry.crm.enterprise.ccp.dkc.ws.client.SforceServiceStub">
+        <constructor-arg index="0" type="java.lang.String"
+            value="${sfdc.endpoint}" />
+    </bean>
+</beans>
