@@ -4,13 +4,13 @@ pipeline {
         stage('Checkout') {
             steps {
 		checkout scm
-		setBuildStatus ("${context}", 'Checking code coverage levels', 'PENDING')
 	    }
         }
 	    
 	stage('Unit Test') { 
       		steps {
         	bat 'mvn clean test'
+		setBuildStatus ("${context}", 'Checking code coverage levels', 'PENDING')
       		}
     	}
 	    
