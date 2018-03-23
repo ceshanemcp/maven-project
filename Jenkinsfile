@@ -1,5 +1,3 @@
-properties([[$class: 'GitLabConnectionProperty', gitLabConnection: 'YOUR_GITLAB_CONNECTION_NAME']])
-
 pipeline {
     agent any
     stages {
@@ -7,9 +5,6 @@ pipeline {
             steps {
 		checkout scm
 		setBuildStatus ("${context}", 'Checking code coverage levels', 'PENDING')
-		gitlabCommitStatus {
-    			bat 'echo "Testing"'
-  		}
 	    }
         }
 	stage('Unit Test') { 
