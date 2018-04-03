@@ -10,7 +10,7 @@ pipeline {
 	stage('Unit Test') { 
       		steps {
         	bat 'mvn clean test'
-		[$class: 'GitHubCommitStatusSetter', statusResultSource: [$class: 'ConditionalStatusResultSource', results: []]]
+		step([$class: 'GitHubCommitStatusSetter', statusResultSource: [$class: 'ConditionalStatusResultSource', results: []]])
 
       		}
     	}
