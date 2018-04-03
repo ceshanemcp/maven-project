@@ -10,7 +10,8 @@ pipeline {
 	stage('Unit Test') { 
       		steps {
         	bat 'mvn clean test'
-		setBuildStatus ("${context}", 'Checking code coverage levels', 'PENDING')
+		[$class: 'GitHubCommitStatusSetter', statusResultSource: [$class: 'ConditionalStatusResultSource', results: []]]
+
       		}
     	}
 	    
